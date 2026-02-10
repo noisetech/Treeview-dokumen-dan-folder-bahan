@@ -66,3 +66,29 @@ ul[role="group"] {
   margin-left: 6px;
   padding-left: 10px;
 }
+
+
+.action-icons {
+  display: none;
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  gap: 5px;
+}
+
+.tree-label:hover .action-icons,
+.file-item:hover .action-icons,
+.selected-item .action-icons {
+  display: inline-flex;
+  cursor: pointer;
+}
+
+.action-icons i {
+  color: #333;
+  padding: 2px;
+}
+
+.action-icons i:hover {
+  color: red;
+}
