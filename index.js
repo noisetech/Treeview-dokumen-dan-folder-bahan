@@ -124,3 +124,31 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+  /* ===============================
+     HAPUS FILE / FOLDER SESUAI ITEM TERPILIH
+  =============================== */
+  document.querySelectorAll(".hapus").forEach(btn => {
+    btn.addEventListener("click", function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      // cari card tempat tombol ini berada
+      const card = btn.closest(".card");
+      if (!card) return;
+
+      // cari item yang dipilih (aria-selected="true") di card itu
+      const selectedItem = card.querySelector('[role="treeitem"][aria-selected="true"]');
+      if (!selectedItem) {
+        alert("Pilih file atau folder yang ingin dihapus!");
+        return;
+      }
+
+      // hapus item terpilih
+      selectedItem.remove();
+      console.log("Item terpilih dihapus:", selectedItem.textContent.trim());
+    });
+  });
+});
+

@@ -17,58 +17,71 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <h3 id="tree_label">Dokumen Manajemen</h3>
+    <h3 id="tree_label"></h3>
 
     <ul role="tree" aria-labelledby="tree_label">
       <!-- ROOT -->
-      <li role="treeitem" aria-expanded="true" aria-selected="false">
-        <span>Root Folder</span>
-        <ul role="group">
-          <!-- LEVEL 1 -->
-          <li role="treeitem" aria-expanded="true" aria-selected="false">
-            <span
-              >Level 1 Folder
-              <sup>
-                <span class="badge bg-primary px-1">
-                  <i class="fas fa-trash-alt"></i></span></sup
-            ></span>
-            <ul role="group">
-              <!-- LEVEL 2 -->
+
+      <div class="row">
+        <div class="col-md-4">
+          <div class="card shadow">
+            <di class="card-header">
+              <div class="d-flex justify-content-end">
+                <div class="btn-group">
+                  <button
+                    class="btn btn-sm btn-secondary dropdown-toggle"
+                    type="button"
+                    id="dropdownMenuButton"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    Aksi
+                  </button>
+                  <ul
+                    class="dropdown-menu"
+                    aria-labelledby="dropdownMenuButton"
+                  >
+                    <li>
+                      <a class="dropdown-item" href="#"
+                        ><span class="badge bg-danger hapus">Hapus</span></a
+                      >
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="#"
+                        ><span class="badge bg-danger buat_folder">Buat Folder</span></a
+                      >
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </di>
+            <div class="card-body">
               <li role="treeitem" aria-expanded="true" aria-selected="false">
-                <span>Level 2 Folder</span>
+                <span>Root Folder</span>
                 <ul role="group">
-                  <!-- LEVEL 3 -->
+                  <!-- LEVEL 1 -->
                   <li
                     role="treeitem"
                     aria-expanded="true"
                     aria-selected="false"
                   >
-                    <span>Level 3 Folder</span>
+                    <span>Level 1 Folder </span>
                     <ul role="group">
-                      <!-- FILES -->
-                      <li role="treeitem" class="doc" aria-selected="false">
-                        file-deep-1.docx
-                      </li>
-                      <li role="treeitem" class="doc" aria-selected="false">
-                        file-deep-2.docx
-                      </li>
-                    </ul>
-                    <ul role="group">
-                      <!-- LEVEL 4 -->
+                      <!-- LEVEL 2 -->
                       <li
                         role="treeitem"
                         aria-expanded="true"
                         aria-selected="false"
                       >
-                        <span>Level 4 Folder</span>
+                        <span>Level 2 Folder</span>
                         <ul role="group">
-                          <!-- LEVEL 5 -->
+                          <!-- LEVEL 3 -->
                           <li
                             role="treeitem"
                             aria-expanded="true"
                             aria-selected="false"
                           >
-                            <span>Level 5 Folder</span>
+                            <span>Level 3 Folder</span>
                             <ul role="group">
                               <!-- FILES -->
                               <li
@@ -86,176 +99,59 @@
                                 file-deep-2.docx
                               </li>
                             </ul>
-                          </li>
-                        </ul>
-                      </li>
-                    </ul>
-                  </li>
-                </ul>
-              </li>
-
-              <!-- FILE DI LEVEL 1 -->
-              <li role="treeitem" class="doc" aria-selected="false">
-                file-level1.docx
-              </li>
-            </ul>
-          </li>
-        </ul>
-      </li>
-
-      <li role="treeitem" aria-expanded="true" aria-selected="false">
-        <span>Root Folder</span>
-        <ul role="group">
-          <!-- LEVEL 1 -->
-          <li role="treeitem" aria-expanded="true" aria-selected="false">
-            <span>Level 1 Folder</span>
-            <ul role="group">
-              <!-- LEVEL 2 -->
-              <li role="treeitem" aria-expanded="true" aria-selected="false">
-                <span>Level 2 Folder</span>
-                <ul role="group">
-                  <!-- LEVEL 3 -->
-                  <li
-                    role="treeitem"
-                    aria-expanded="true"
-                    aria-selected="false"
-                  >
-                    <span>Level 3 Folder</span>
-                    <ul role="group">
-                      <!-- FILES -->
-                      <li role="treeitem" class="doc" aria-selected="false">
-                        file-deep-1.docx
-                      </li>
-                      <li role="treeitem" class="doc" aria-selected="false">
-                        file-deep-2.docx
-                      </li>
-                    </ul>
-                    <ul role="group">
-                      <!-- LEVEL 4 -->
-                      <li
-                        role="treeitem"
-                        aria-expanded="true"
-                        aria-selected="false"
-                      >
-                        <span>Level 4 Folder</span>
-                        <ul role="group">
-                          <!-- LEVEL 5 -->
-                          <li
-                            role="treeitem"
-                            aria-expanded="true"
-                            aria-selected="false"
-                          >
-                            <span>Level 5 Folder</span>
                             <ul role="group">
-                              <!-- FILES -->
+                              <!-- LEVEL 4 -->
                               <li
                                 role="treeitem"
-                                class="doc"
+                                aria-expanded="true"
                                 aria-selected="false"
                               >
-                                file-deep-1.docx
-                              </li>
-                              <li
-                                role="treeitem"
-                                class="doc"
-                                aria-selected="false"
-                              >
-                                file-deep-2.docx
+                                <span>Level 4 Folder</span>
+                                <ul role="group">
+                                  <!-- LEVEL 5 -->
+                                  <li
+                                    role="treeitem"
+                                    aria-expanded="true"
+                                    aria-selected="false"
+                                  >
+                                    <span>Level 5 Folder</span>
+                                    <ul role="group">
+                                      <!-- FILES -->
+                                      <li
+                                        role="treeitem"
+                                        class="doc"
+                                        aria-selected="false"
+                                      >
+                                        file-deep-1.docx
+                                      </li>
+                                      <li
+                                        role="treeitem"
+                                        class="doc"
+                                        aria-selected="false"
+                                      >
+                                        file-deep-2.docx
+                                      </li>
+                                    </ul>
+                                  </li>
+                                </ul>
                               </li>
                             </ul>
                           </li>
                         </ul>
                       </li>
-                    </ul>
-                  </li>
-                </ul>
-              </li>
 
-              <!-- FILE DI LEVEL 1 -->
-              <li role="treeitem" class="doc" aria-selected="false">
-                file-level1.docx
-              </li>
-            </ul>
-          </li>
-        </ul>
-      </li>
-
-      <li role="treeitem" aria-expanded="true" aria-selected="false">
-        <span>Root Folder</span>
-        <ul role="group">
-          <!-- LEVEL 1 -->
-          <li role="treeitem" aria-expanded="true" aria-selected="false">
-            <span>Level 1 Folder</span>
-            <ul role="group">
-              <!-- LEVEL 2 -->
-              <li role="treeitem" aria-expanded="true" aria-selected="false">
-                <span>Level 2 Folder</span>
-                <ul role="group">
-                  <!-- LEVEL 3 -->
-                  <li
-                    role="treeitem"
-                    aria-expanded="true"
-                    aria-selected="false"
-                  >
-                    <span>Level 3 Folder</span>
-                    <ul role="group">
-                      <!-- FILES -->
+                      <!-- FILE DI LEVEL 1 -->
                       <li role="treeitem" class="doc" aria-selected="false">
-                        file-deep-1.docx
-                      </li>
-                      <li role="treeitem" class="doc" aria-selected="false">
-                        file-deep-2.docx
-                      </li>
-                    </ul>
-                    <ul role="group">
-                      <!-- LEVEL 4 -->
-                      <li
-                        role="treeitem"
-                        aria-expanded="true"
-                        aria-selected="false"
-                      >
-                        <span>Level 4 Folder</span>
-                        <ul role="group">
-                          <!-- LEVEL 5 -->
-                          <li
-                            role="treeitem"
-                            aria-expanded="true"
-                            aria-selected="false"
-                          >
-                            <span>Level 5 Folder</span>
-                            <ul role="group">
-                              <!-- FILES -->
-                              <li
-                                role="treeitem"
-                                class="doc"
-                                aria-selected="false"
-                              >
-                                file-deep-1.docx
-                              </li>
-                              <li
-                                role="treeitem"
-                                class="doc"
-                                aria-selected="false"
-                              >
-                                file-deep-2.docx
-                              </li>
-                            </ul>
-                          </li>
-                        </ul>
+                        file-level1.docx
                       </li>
                     </ul>
                   </li>
                 </ul>
               </li>
-
-              <!-- FILE DI LEVEL 1 -->
-              <li role="treeitem" class="doc" aria-selected="false">
-                file-level1.docx
-              </li>
-            </ul>
-          </li>
-        </ul>
-      </li>
+            </div>
+          </div>
+        </div>
+      </div>
     </ul>
 
     <!-- <input id="last_action" type="text" size="25" readonly /> -->
