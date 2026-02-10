@@ -1,14 +1,18 @@
-/* RESET */
+/* =========================
+   RESET
+========================= */
 ul[role="tree"],
 ul[role="group"] {
   margin: 0;
   padding-left: 1.2rem;
   list-style: none;
-  font-family: Segoe UI, sans-serif;
+  font-family: "Segoe UI", sans-serif;
   font-size: 14px;
 }
 
-/* SEMUA ITEM */
+/* =========================
+   SEMUA ITEM
+========================= */
 [role="treeitem"] {
   cursor: pointer;
   user-select: none;
@@ -17,57 +21,123 @@ ul[role="group"] {
   position: relative;
 }
 
-/* FOLDER & FILE ICON */
+/* =========================
+   ICON FILE & FOLDER
+========================= */
 [role="treeitem"]::before {
   display: inline-block;
   width: 18px;
 }
 
-/* FILE */
-[role="treeitem"].doc::before {
-  content: "📄";
+.file::before {
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  width: 18px;
+  display: inline-block;
+  margin-right: 4px;
+}
+
+/* PDF */
+.file.pdf::before {
+  content: "\f1c1";
+  color: #e53935;
+}
+
+/* WORD */
+.file.word::before {
+  content: "\f1c2";
+  color: #1976d2;
+}
+
+/* EXCEL */
+.file.excel::before {
+  content: "\f1c3";
+  color: #2e7d32;
+}
+
+/* IMAGE */
+.file.image::before {
+  content: "\f1c5";
+  color: #8e24aa;
+}
+
+/* VIDEO */
+.file.video::before {
+  content: "\f1c8";
+  color: #ef6c00;
+}
+
+/* ZIP */
+.file.zip::before {
+  content: "\f1c6";
+  color: #6d4c41;
+}
+
+/* DEFAULT FILE */
+.file-default::before {
+  content: "\f15b";
+  color: #607d8b;
 }
 
 /* FOLDER CLOSED */
 [role="treeitem"][aria-expanded="false"]::before {
-  content: "📁";
+  content: "\f07b";
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  color: #f4b400;
 }
 
 /* FOLDER OPEN */
 [role="treeitem"][aria-expanded="true"]::before {
-  content: "📂";
+  content: "\f07c";
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  color: #f4b400;
 }
 
-/* HIDE CHILDREN SAAT COLLAPSE */
+/* =========================
+   HIDE CHILDREN SAAT COLLAPSE
+========================= */
 [role="treeitem"][aria-expanded="false"] > ul {
   display: none;
+  color: #f4b400;
 }
 
-/* SELECTED */
+/* =========================
+   SELECTED ITEM
+========================= */
 [role="treeitem"][aria-selected="true"] {
   background: #d0e7ff;
   border-left: 4px solid #1976d2;
 }
 
-/* HOVER */
+/* =========================
+   HOVER
+========================= */
 [role="treeitem"]:hover {
   background: #eeeeee;
 }
 
-/* FOCUS KEYBOARD */
+/* =========================
+   FOCUS KEYBOARD
+========================= */
 [role="treeitem"]:focus {
   outline: none;
   background: #cfd8dc;
 }
 
-/* GARIS STRUKTUR (OPSIONAL BIAR KELIHATAN HIRARKI) */
+/* =========================
+   GARIS STRUKTUR (OPSIONAL)
+========================= */
 ul[role="group"] {
   border-left: 1px dashed #ccc;
   margin-left: 6px;
   padding-left: 10px;
 }
 
-
+/* =========================
+   ACTION ICONS OPSIONAL
+========================= */
 .action-icons {
   display: none;
   position: absolute;
