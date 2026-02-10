@@ -1,0 +1,68 @@
+/* RESET */
+ul[role="tree"],
+ul[role="group"] {
+  margin: 0;
+  padding-left: 1.2rem;
+  list-style: none;
+  font-family: Segoe UI, sans-serif;
+  font-size: 14px;
+}
+
+/* SEMUA ITEM */
+[role="treeitem"] {
+  cursor: pointer;
+  user-select: none;
+  padding: 3px 6px;
+  border-radius: 4px;
+  position: relative;
+}
+
+/* FOLDER & FILE ICON */
+[role="treeitem"]::before {
+  display: inline-block;
+  width: 18px;
+}
+
+/* FILE */
+[role="treeitem"].doc::before {
+  content: "📄";
+}
+
+/* FOLDER CLOSED */
+[role="treeitem"][aria-expanded="false"]::before {
+  content: "📁";
+}
+
+/* FOLDER OPEN */
+[role="treeitem"][aria-expanded="true"]::before {
+  content: "📂";
+}
+
+/* HIDE CHILDREN SAAT COLLAPSE */
+[role="treeitem"][aria-expanded="false"] > ul {
+  display: none;
+}
+
+/* SELECTED */
+[role="treeitem"][aria-selected="true"] {
+  background: #d0e7ff;
+  border-left: 4px solid #1976d2;
+}
+
+/* HOVER */
+[role="treeitem"]:hover {
+  background: #eeeeee;
+}
+
+/* FOCUS KEYBOARD */
+[role="treeitem"]:focus {
+  outline: none;
+  background: #cfd8dc;
+}
+
+/* GARIS STRUKTUR (OPSIONAL BIAR KELIHATAN HIRARKI) */
+ul[role="group"] {
+  border-left: 1px dashed #ccc;
+  margin-left: 6px;
+  padding-left: 10px;
+}
