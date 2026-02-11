@@ -5,7 +5,7 @@
   <li>Mencari file berdasarkan keywoard</li>
       <li>Menghapus file yang terplih bisa dilakukan 1 data atapun lebih</li>
       <li>Root folder tidak terbatas</li>
-      <li>Sub folter tidak terbatas</li>
+      <li>Sub folder tidak terbatas</li>
 </p>
 
 
