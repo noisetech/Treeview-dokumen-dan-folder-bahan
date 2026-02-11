@@ -2,28 +2,37 @@ document.addEventListener("DOMContentLoaded", function () {
   const treeContainer = document.getElementById("tree-container");
 
   const treeData = {
-    name: "Root Folder",
+    name: "Belajar PHP",
     children: [
       { name: "file-level1.docx" },
+
       {
-        name: "Level 1 Folder",
+        name: "Dasar PHP",
         children: [
+          { name: "root-file.txt" },
           {
-            name: "Level 2 Folder",
+            name: "Level 1 Folder",
             children: [
+              { name: "file-l1.docx" },
               {
-                name: "Level 3 Folder",
+                name: "Level 2 Folder",
                 children: [
-                  { name: "file-gg-1.docx" },
-                  { name: "file-ww-2.jpg" },
+                  { name: "file-l2.pdf" },
                   {
-                    name: "Level 4 Folder",
+                    name: "Level 3 Folder",
                     children: [
+                      { name: "file-l3.jpg" },
                       {
-                        name: "Level 5 Folder",
+                        name: "Level 4 Folder",
                         children: [
-                          { name: "pengesahan-laboratium-2024-1.pdf" },
-                          { name: "file-aa-2.zip" },
+                          { name: "file-l4.png" },
+                          {
+                            name: "Level 5 Folder",
+                            children: [
+                              { name: "file-l5-a.zip" },
+                              { name: "file-l5-b.xls" },
+                            ],
+                          },
                         ],
                       },
                     ],
@@ -32,7 +41,44 @@ document.addEventListener("DOMContentLoaded", function () {
               },
             ],
           },
-          { name: "file-bebas.xls" },
+        ],
+      },
+
+      {
+        name: "Belajar OOP",
+        children: [
+          { name: "root-file.txt" },
+          {
+            name: "Level 1 Folder",
+            children: [
+              { name: "file-l1.docx" },
+              {
+                name: "Level 2 Folder",
+                children: [
+                  { name: "file-l2.pdf" },
+                  {
+                    name: "Level 3 Folder",
+                    children: [
+                      { name: "file-l3.jpg" },
+                      {
+                        name: "Level 4 Folder",
+                        children: [
+                          { name: "file-l4.png" },
+                          {
+                            name: "Level 5 Folder",
+                            children: [
+                              { name: "file-l5-a.zip" },
+                              { name: "file-l5-b.docx" },
+                            ],
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
         ],
       },
     ],
@@ -81,7 +127,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function getVisibleItems() {
     return [...tree.querySelectorAll('[role="treeitem"]')].filter(
-      (el) => el.offsetParent !== null
+      (el) => el.offsetParent !== null,
     );
   }
 
@@ -190,8 +236,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const parentLabel = parentLabelEl
       ? parentLabelEl.innerText.trim()
       : parentFolder
-      ? parentFolder.childNodes[0].textContent.trim()
-      : "";
+        ? parentFolder.childNodes[0].textContent.trim()
+        : "";
 
     const itemLabelEl = item.querySelector(":scope > span");
     const itemLabel = itemLabelEl
@@ -208,7 +254,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       const card = btn.closest(".card");
       const selectedItems = card.querySelectorAll(
-        '[role="treeitem"][aria-selected="true"]'
+        '[role="treeitem"][aria-selected="true"]',
       );
 
       if (!selectedItems.length) {
