@@ -33,7 +33,6 @@ document.addEventListener("DOMContentLoaded", function () {
         },
       ],
     },
-
     {
       name: "Belajar JavaScript",
       children: [
@@ -55,6 +54,101 @@ document.addEventListener("DOMContentLoaded", function () {
                       children: [
                         { name: "case-api.zip" },
                         { name: "case-dom.zip" },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+    {
+      name: "Belajar Laravel",
+      children: [
+        { name: "overview.pdf" },
+        {
+          name: "Routing",
+          children: [
+            { name: "basic-route.txt" },
+            {
+              name: "Controller",
+              children: [
+                { name: "resource-controller.docx" },
+                {
+                  name: "Middleware",
+                  children: [
+                    { name: "auth-middleware.pdf" },
+                    {
+                      name: "Project Mini",
+                      children: [
+                        { name: "gw-banget.zip" },
+                        { name: "mini-auth.zip" },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+
+    {
+      name: "Belajar Laravel",
+      children: [
+        { name: "overview.pdf" },
+        {
+          name: "Routing",
+          children: [
+            { name: "basic-route.txt" },
+            {
+              name: "Controller",
+              children: [
+                { name: "resource-controller.docx" },
+                {
+                  name: "Middleware",
+                  children: [
+                    { name: "auth-middleware.pdf" },
+                    {
+                      name: "Project Mini",
+                      children: [
+                        { name: "mini-crud.zip" },
+                        { name: "mini-auth.zip" },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+
+    {
+      name: "Belajar Laravel",
+      children: [
+        { name: "overview.pdf" },
+        {
+          name: "Routing",
+          children: [
+            { name: "basic-route.txt" },
+            {
+              name: "Controller",
+              children: [
+                { name: "resource-controller.docx" },
+                {
+                  name: "Middleware",
+                  children: [
+                    { name: "auth-middleware.pdf" },
+                    {
+                      name: "Project Mini",
+                      children: [
+                        { name: "mini-crud.zip" },
+                        { name: "mini-auth.zip" },
                       ],
                     },
                   ],
@@ -99,10 +193,8 @@ document.addEventListener("DOMContentLoaded", function () {
     },
   ];
 
-  console.log(treeData);
-
   /* ===============================
-     BUILD TREE (OPTIMIZED)
+     BUILD TREE
   =============================== */
   function buildTree(node) {
     const li = document.createElement("li");
@@ -145,20 +237,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
   treeData.forEach((root) => treeContainer.appendChild(buildTree(root)));
 
-  const tree = treeContainer;
   let lastSelected = null;
 
   /* ===============================
-     UTIL
+     UTIL FUNCTIONS
   =============================== */
   function getVisibleItems() {
-    return [...tree.querySelectorAll('[role="treeitem"]')].filter(
+    return [...treeContainer.querySelectorAll('[role="treeitem"]')].filter(
       (el) => el.offsetParent !== null,
     );
   }
 
   function clearSelection() {
-    tree
+    treeContainer
       .querySelectorAll('[aria-selected="true"]')
       .forEach((el) => el.setAttribute("aria-selected", "false"));
   }
@@ -182,15 +273,39 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
+  function getCurrentPath(item) {
+    let parts = [];
+    let current = item;
+
+    while (current && current.matches('[role="treeitem"]')) {
+      let label = current
+        .querySelector(":scope > .folder-label")
+        ?.textContent?.trim();
+      if (!label) {
+        // fallback ambil node text pertama
+        label = Array.from(current.childNodes)
+          .filter((n) => n.nodeType === Node.TEXT_NODE)
+          .map((n) => n.textContent.trim())
+          .join("");
+      }
+
+      parts.unshift(label);
+      current = current.parentElement.closest('[role="treeitem"]');
+    }
+
+    return parts.join("/");
+  }
+
   /* ===============================
-     CLICK (EVENT DELEGATION)
+     TREE CLICK
   =============================== */
-  tree.addEventListener("click", function (e) {
+  treeContainer.addEventListener("click", function (e) {
     const item = e.target.closest('[role="treeitem"]');
     if (!item) return;
 
     const isFolder = item.querySelector(":scope > ul");
 
+    // MULTI SELECTION
     if (e.ctrlKey || e.metaKey) {
       item.setAttribute(
         "aria-selected",
@@ -219,9 +334,9 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   /* ===============================
-     KEYBOARD
+     KEYBOARD NAVIGATION
   =============================== */
-  tree.addEventListener("keydown", function (e) {
+  treeContainer.addEventListener("keydown", function (e) {
     const current = document.activeElement.closest('[role="treeitem"]');
     if (!current) return;
 
@@ -241,47 +356,96 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   /* ===============================
-     PATH
-  =============================== */
-  function getCurrentPath(item) {
-    let parts = [];
-    let current = item;
+   HAPUS ITEM TERPILIH
+=============================== */
+  const hapusBtn = document.querySelector(".hapus");
 
-    while (current && current.matches('[role="treeitem"]')) {
-      const labelEl = current.querySelector(":scope > .folder-label");
-      const label = labelEl
-        ? labelEl.textContent.trim()
-        : current.childNodes[0].textContent.trim();
-
-      parts.unshift(label);
-      current = current.parentElement.closest('[role="treeitem"]');
-    }
-
-    return parts.join("/");
-  }
-
-  /* ===============================
-     DELETE (NO DUPLICATE LISTENER)
-  =============================== */
-  document.addEventListener("click", function (e) {
-    if (!e.target.matches(".hapus")) return;
-
+  hapusBtn.addEventListener("click", function (e) {
     e.preventDefault();
-    const selectedItems = tree.querySelectorAll(
-      '[role="treeitem"][aria-selected="true"]',
-    );
 
-    if (!selectedItems.length) {
-      alert("Pilih file atau folder dulu!");
+    // ambil semua item yang dipilih
+    const selectedItems = treeContainer.querySelectorAll(
+      '[aria-selected="true"]',
+    );
+    if (selectedItems.length === 0) {
+      alert("Tidak ada item yang dipilih!");
       return;
     }
 
-    const paths = [];
-    selectedItems.forEach((item) => {
-      paths.push(getCurrentPath(item));
-      item.remove();
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        selectedItems.forEach((item) => {
+          const path = getCurrentPath(item); // ambil path item
+          console.log("Menghapus item:", path); // bisa ganti dengan alert(path) jika mau
+          item.remove(); // hapus dari DOM
+        });
+
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success",
+        });
+      }
+    });
+  });
+
+  let searchTimeout;
+  document.getElementById("searchFile")?.addEventListener("input", function () {
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => doSearch(this.value), 200);
+  });
+
+  function doSearch(keyword) {
+    const kw = keyword.toLowerCase().trim();
+
+    // Hapus highlight dan selection sebelumnya
+    treeContainer
+      .querySelectorAll(".tree-match")
+      .forEach((el) => el.classList.remove("tree-match"));
+    clearSelection();
+
+    // Tutup semua folder
+    treeContainer.querySelectorAll('[aria-expanded="true"]').forEach((el) => {
+      el.setAttribute("aria-expanded", "false");
+      const group = el.querySelector(":scope > ul");
+      if (group) group.hidden = true;
     });
 
-    console.log("Dihapus:", paths);
-  });
+    if (!kw) return;
+
+    // Ambil semua treeitem yang **bukan folder** (tidak punya ul child)
+    const items = Array.from(
+      treeContainer.querySelectorAll('[role="treeitem"]'),
+    ).filter((item) => !item.querySelector(":scope > ul")); // Hanya file
+
+    let firstMatch = null;
+
+    items.forEach((item) => {
+      // label bisa di folder-label atau textContent
+      const labelEl = item.querySelector(":scope > .folder-label");
+      const label = labelEl
+        ? labelEl.textContent.toLowerCase()
+        : item.childNodes[0]?.textContent.toLowerCase() || "";
+
+      if (label.includes(kw)) {
+        expandParents(item); // expand agar terlihat
+        item.classList.add("tree-match");
+        item.setAttribute("aria-selected", "true");
+
+        if (!firstMatch) firstMatch = item;
+      }
+    });
+
+    // Scroll hanya ke match pertama
+    if (firstMatch)
+      firstMatch.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
 });

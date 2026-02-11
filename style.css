@@ -2,7 +2,6 @@
    RESET
 ========================= */
 
-
 ul[role="tree"],
 ul[role="group"] {
   margin: 0;
@@ -100,12 +99,12 @@ small.text-muted {
 /* SELECTED (single & multi sama) */
 [role="treeitem"][aria-selected="true"] {
   background: #cce5ff;
-  /* border-left: 4px solid #0d6efd; */
+  border-left: 4px solid #0d6efd;
 }
 
 /* HOVER (yang belum dipilih) */
 [role="treeitem"]:hover:not([aria-selected="true"]) {
-  background: #e9f3ff;
+  background: #f7f7f7;
 }
 
 /* FOCUS keyboard tapi belum dipilih */
