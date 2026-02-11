@@ -1,0 +1,122 @@
+  const treeData = {
+    name: "Belajar PHP",
+    children: [
+      { name: "file-level1.docx" },
+
+      {
+        name: "PHP Dasar",
+        children: [
+          { name: "root-file.txt" },
+          {
+            name: "Level 1 Folder",
+            children: [
+              { name: "file-l1.docx" },
+              {
+                name: "Level 2 Folder",
+                children: [
+                  { name: "file-l2.pdf" },
+                  {
+                    name: "Level 3 Folder",
+                    children: [
+                      { name: "file-l3.jpg" },
+                      {
+                        name: "Level 4 Folder",
+                        children: [
+                          { name: "file-l4.png" },
+                          {
+                            name: "Level 5 Folder",
+                            children: [
+                              { name: "file-l5-a.zip" },
+                              { name: "file-l5-b.xls" },
+                            ],
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+
+      {
+        name: "PHP OOP",
+        children: [
+          { name: "root-file.txt" },
+          {
+            name: "Level 1 Folder",
+            children: [
+              { name: "file-l1.docx" },
+              {
+                name: "Level 2 Folder",
+                children: [
+                  { name: "file-l2.pdf" },
+                  {
+                    name: "Level 3 Folder",
+                    children: [
+                      { name: "file-l3.jpg" },
+                      {
+                        name: "Level 4 Folder",
+                        children: [
+                          { name: "file-l4.png" },
+                          {
+                            name: "Level 5 Folder",
+                            children: [
+                              { name: "file-l5-a.zip" },
+                              { name: "file-l5-b.docx" },
+                            ],
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+
+      {
+        name: "PHP MVC",
+        children: [
+          { name: "root-file.txt" },
+          {
+            name: "Level 1 Folder",
+            children: [
+              { name: "file-l1.docx" },
+              {
+                name: "Level 2 Folder",
+                children: [
+                  { name: "file-l2.pdf" },
+                  {
+                    name: "Level 3 Folder",
+                    children: [
+                      { name: "file-l3.jpg" },
+                      {
+                        name: "Level 4 Folder",
+                        children: [
+                          { name: "file-l4.png" },
+                          {
+                            name: "Level 5 Folder",
+                            children: [
+                              { name: "file-l5-a.zip" },
+                              { name: "file-l5-b.docx" },
+                            ],
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+
+      
+    ],
+  };

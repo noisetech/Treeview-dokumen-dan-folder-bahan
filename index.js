@@ -1,89 +1,109 @@
 document.addEventListener("DOMContentLoaded", function () {
   const treeContainer = document.getElementById("tree-container");
 
-  const treeData = {
-    name: "Belajar PHP",
-    children: [
-      { name: "file-level1.docx" },
+  const treeData = [
+    {
+      name: "Belajar PHP",
+      children: [
+        { name: "intro.pdf" },
+        {
+          name: "Dasar PHP",
+          children: [
+            { name: "variabel.txt" },
+            {
+              name: "Struktur Kontrol",
+              children: [
+                { name: "if-else.docx" },
+                {
+                  name: "Perulangan",
+                  children: [
+                    { name: "for-loop.pdf" },
+                    {
+                      name: "Latihan",
+                      children: [
+                        { name: "latihan-1.zip" },
+                        { name: "latihan-2.zip" },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
 
-      {
-        name: "Dasar PHP",
-        children: [
-          { name: "root-file.txt" },
-          {
-            name: "Level 1 Folder",
-            children: [
-              { name: "file-l1.docx" },
-              {
-                name: "Level 2 Folder",
-                children: [
-                  { name: "file-l2.pdf" },
-                  {
-                    name: "Level 3 Folder",
-                    children: [
-                      { name: "file-l3.jpg" },
-                      {
-                        name: "Level 4 Folder",
-                        children: [
-                          { name: "file-l4.png" },
-                          {
-                            name: "Level 5 Folder",
-                            children: [
-                              { name: "file-l5-a.zip" },
-                              { name: "file-l5-b.xls" },
-                            ],
-                          },
-                        ],
-                      },
-                    ],
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-      },
+    {
+      name: "Belajar JavaScript",
+      children: [
+        { name: "intro-js.pdf" },
+        {
+          name: "Fundamental",
+          children: [
+            { name: "variable.txt" },
+            {
+              name: "Function",
+              children: [
+                { name: "arrow-function.docx" },
+                {
+                  name: "Async JS",
+                  children: [
+                    { name: "promise.pdf" },
+                    {
+                      name: "Studi Kasus",
+                      children: [
+                        { name: "case-api.zip" },
+                        { name: "case-dom.zip" },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
 
-      {
-        name: "Belajar OOP",
-        children: [
-          { name: "root-file.txt" },
-          {
-            name: "Level 1 Folder",
-            children: [
-              { name: "file-l1.docx" },
-              {
-                name: "Level 2 Folder",
-                children: [
-                  { name: "file-l2.pdf" },
-                  {
-                    name: "Level 3 Folder",
-                    children: [
-                      { name: "file-l3.jpg" },
-                      {
-                        name: "Level 4 Folder",
-                        children: [
-                          { name: "file-l4.png" },
-                          {
-                            name: "Level 5 Folder",
-                            children: [
-                              { name: "file-l5-a.zip" },
-                              { name: "file-l5-b.docx" },
-                            ],
-                          },
-                        ],
-                      },
-                    ],
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-      },
-    ],
-  };
+    {
+      name: "Belajar Laravel",
+      children: [
+        { name: "overview.pdf" },
+        {
+          name: "Routing",
+          children: [
+            { name: "basic-route.txt" },
+            {
+              name: "Controller",
+              children: [
+                { name: "resource-controller.docx" },
+                {
+                  name: "Middleware",
+                  children: [
+                    { name: "auth-middleware.pdf" },
+                    {
+                      name: "Project Mini",
+                      children: [
+                        { name: "mini-crud.zip" },
+                        { name: "mini-auth.zip" },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  ];
 
+  console.log(treeData);
+
+  /* ===============================
+     BUILD TREE
+  =============================== */
   function buildTree(node) {
     const li = document.createElement("li");
     li.setAttribute("role", "treeitem");
@@ -98,9 +118,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
       const ul = document.createElement("ul");
       ul.setAttribute("role", "group");
+
       node.children.forEach((child) => {
         ul.appendChild(buildTree(child));
       });
+
       li.appendChild(ul);
     } else {
       li.classList.add("file");
@@ -121,7 +143,11 @@ document.addEventListener("DOMContentLoaded", function () {
     return li;
   }
 
-  treeContainer.appendChild(buildTree(treeData));
+  /* ===============================
+     RENDER ALL ROOT
+  =============================== */
+  treeData.forEach((root) => treeContainer.appendChild(buildTree(root)));
+
   const tree = treeContainer;
   let lastSelected = null;
 
@@ -159,11 +185,14 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function clearSearchHighlight() {
-    tree.querySelectorAll(".tree-match").forEach((el) => {
-      el.classList.remove("tree-match");
-    });
+    tree
+      .querySelectorAll(".tree-match")
+      .forEach((el) => el.classList.remove("tree-match"));
   }
 
+  /* ===============================
+     CLICK SELECT
+  =============================== */
   tree.addEventListener("click", function (e) {
     const item = e.target.closest('[role="treeitem"]');
     if (!item) return;
@@ -180,9 +209,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const [min, max] = start < end ? [start, end] : [end, start];
 
       clearSelection();
-      for (let i = min; i <= max; i++) {
-        selectItem(items[i]);
-      }
+      for (let i = min; i <= max; i++) selectItem(items[i]);
     } else {
       clearSelection();
       selectItem(item);
@@ -197,6 +224,9 @@ document.addEventListener("DOMContentLoaded", function () {
     e.stopPropagation();
   });
 
+  /* ===============================
+     KEYBOARD NAV
+  =============================== */
   tree.addEventListener("keydown", function (e) {
     const current = document.activeElement.closest('[role="treeitem"]');
     if (!current) return;
@@ -204,49 +234,38 @@ document.addEventListener("DOMContentLoaded", function () {
     const visibleItems = getVisibleItems();
     let index = visibleItems.indexOf(current);
 
-    switch (e.key) {
-      case "ArrowDown":
-        if (visibleItems[index + 1]) visibleItems[index + 1].focus();
-        break;
-      case "ArrowUp":
-        if (visibleItems[index - 1]) visibleItems[index - 1].focus();
-        break;
-      case "ArrowRight":
-        const openGroup = current.querySelector(":scope > ul");
-        if (openGroup) current.setAttribute("aria-expanded", "true");
-        break;
-      case "ArrowLeft":
-        if (current.getAttribute("aria-expanded") === "true")
-          current.setAttribute("aria-expanded", "false");
-        else {
-          const parent = current.parentElement.closest('[role="treeitem"]');
-          if (parent) parent.focus();
-        }
-        break;
-      case "Enter":
-      case " ":
-        current.click();
-        break;
-    }
+    if (e.key === "ArrowDown" && visibleItems[index + 1])
+      visibleItems[index + 1].focus();
+    if (e.key === "ArrowUp" && visibleItems[index - 1])
+      visibleItems[index - 1].focus();
+    if (e.key === "ArrowRight") current.setAttribute("aria-expanded", "true");
+    if (e.key === "ArrowLeft") current.setAttribute("aria-expanded", "false");
+    if (e.key === "Enter" || e.key === " ") current.click();
   });
 
+  /* ===============================
+     FULL PATH FIX
+  =============================== */
   function getCurrentPath(item) {
-    const parentFolder = item.parentElement.closest('[role="treeitem"]');
-    const parentLabelEl = parentFolder?.querySelector(":scope > span");
-    const parentLabel = parentLabelEl
-      ? parentLabelEl.innerText.trim()
-      : parentFolder
-        ? parentFolder.childNodes[0].textContent.trim()
-        : "";
+    let parts = [];
+    let current = item;
 
-    const itemLabelEl = item.querySelector(":scope > span");
-    const itemLabel = itemLabelEl
-      ? itemLabelEl.innerText.trim()
-      : item.childNodes[0].textContent.trim();
+    while (current && current.matches('[role="treeitem"]')) {
+      const labelEl = current.querySelector(":scope > span");
+      const label = labelEl
+        ? labelEl.innerText.trim()
+        : current.childNodes[0].textContent.trim();
 
-    return parentLabel ? `${parentLabel}/${itemLabel}` : itemLabel;
+      parts.unshift(label);
+      current = current.parentElement.closest('[role="treeitem"]');
+    }
+
+    return parts.join("/");
   }
 
+  /* ===============================
+     DELETE
+  =============================== */
   document.querySelectorAll(".hapus").forEach((btn) => {
     btn.addEventListener("click", function (e) {
       e.preventDefault();
@@ -263,31 +282,30 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       const paths = [];
-
       selectedItems.forEach((item) => {
         paths.push(getCurrentPath(item));
         item.remove();
       });
 
-      console.log("Dihapus banyak:", paths);
+      console.log("Dihapus:", paths);
     });
   });
 
+  /* ===============================
+     SEARCH
+  =============================== */
   document.getElementById("searchFile")?.addEventListener("input", function () {
     const keyword = this.value.toLowerCase().trim();
 
     clearSearchHighlight();
     clearSelection();
-
-    tree.querySelectorAll('[aria-expanded="true"]').forEach((el) => {
-      el.setAttribute("aria-expanded", "false");
-    });
+    tree
+      .querySelectorAll('[aria-expanded="true"]')
+      .forEach((el) => el.setAttribute("aria-expanded", "false"));
 
     if (!keyword) return;
 
-    const items = tree.querySelectorAll('[role="treeitem"]');
-
-    items.forEach((item) => {
+    tree.querySelectorAll('[role="treeitem"]').forEach((item) => {
       const labelEl = item.querySelector(":scope > span");
       const label = labelEl
         ? labelEl.innerText.toLowerCase()
