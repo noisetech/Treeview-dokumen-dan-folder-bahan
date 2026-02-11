@@ -10,8 +10,13 @@ ul[role="group"] {
   font-size: 14px;
 }
 
+small.text-muted {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
 /* =========================
-   SEMUA ITEM
+   TREE ITEM BASE
 ========================= */
 [role="treeitem"] {
   cursor: pointer;
@@ -32,62 +37,25 @@ ul[role="group"] {
 .file::before {
   font-family: "Font Awesome 6 Free";
   font-weight: 900;
-  width: 18px;
-  display: inline-block;
   margin-right: 4px;
 }
 
-/* PDF */
-.file.pdf::before {
-  content: "\f1c1";
-  color: #e53935;
-}
+/* FILE TYPES */
+.file.pdf::before { content: "\f1c1"; color: #e53935; }
+.file.word::before { content: "\f1c2"; color: #1976d2; }
+.file.excel::before { content: "\f1c3"; color: #2e7d32; }
+.file.image::before { content: "\f1c5"; color: #8e24aa; }
+.file.video::before { content: "\f1c8"; color: #ef6c00; }
+.file.zip::before { content: "\f1c6"; color: #6d4c41; }
+.file-default::before { content: "\f15b"; color: #607d8b; }
 
-/* WORD */
-.file.word::before {
-  content: "\f1c2";
-  color: #1976d2;
-}
-
-/* EXCEL */
-.file.excel::before {
-  content: "\f1c3";
-  color: #2e7d32;
-}
-
-/* IMAGE */
-.file.image::before {
-  content: "\f1c5";
-  color: #8e24aa;
-}
-
-/* VIDEO */
-.file.video::before {
-  content: "\f1c8";
-  color: #ef6c00;
-}
-
-/* ZIP */
-.file.zip::before {
-  content: "\f1c6";
-  color: #6d4c41;
-}
-
-/* DEFAULT FILE */
-.file-default::before {
-  content: "\f15b";
-  color: #607d8b;
-}
-
-/* FOLDER CLOSED */
+/* FOLDER */
 [role="treeitem"][aria-expanded="false"]::before {
   content: "\f07b";
   font-family: "Font Awesome 6 Free";
   font-weight: 900;
   color: #f4b400;
 }
-
-/* FOLDER OPEN */
 [role="treeitem"][aria-expanded="true"]::before {
   content: "\f07c";
   font-family: "Font Awesome 6 Free";
@@ -96,38 +64,35 @@ ul[role="group"] {
 }
 
 /* =========================
-   HIDE CHILDREN SAAT COLLAPSE
+   COLLAPSE
 ========================= */
 [role="treeitem"][aria-expanded="false"] > ul {
   display: none;
-  color: #f4b400;
 }
 
 /* =========================
-   SELECTED ITEM
+   WINDOWS STYLE SELECTION
 ========================= */
+
+/* SELECTED (single & multi sama) */
 [role="treeitem"][aria-selected="true"] {
-  background: #d0e7ff;
-  border-left: 4px solid #1976d2;
+  background: #cce5ff;
+  border-left: 4px solid #0d6efd;
 }
 
-/* =========================
-   HOVER
-========================= */
-[role="treeitem"]:hover {
-  background: #eeeeee;
+/* HOVER (yang belum dipilih) */
+[role="treeitem"]:hover:not([aria-selected="true"]) {
+  background: #e9f3ff;
 }
 
-/* =========================
-   FOCUS KEYBOARD
-========================= */
-[role="treeitem"]:focus {
+/* FOCUS keyboard tapi belum dipilih */
+[role="treeitem"]:focus:not([aria-selected="true"]) {
   outline: none;
-  background: #cfd8dc;
+  background: #ddeeff;
 }
 
 /* =========================
-   GARIS STRUKTUR (OPSIONAL)
+   TREE LINES
 ========================= */
 ul[role="group"] {
   border-left: 1px dashed #ccc;
@@ -136,7 +101,7 @@ ul[role="group"] {
 }
 
 /* =========================
-   ACTION ICONS OPSIONAL
+   ACTION ICONS
 ========================= */
 .action-icons {
   display: none;
@@ -147,18 +112,15 @@ ul[role="group"] {
   gap: 5px;
 }
 
-.tree-label:hover .action-icons,
-.file-item:hover .action-icons,
-.selected-item .action-icons {
+[role="treeitem"]:hover .action-icons,
+[aria-selected="true"] .action-icons {
   display: inline-flex;
-  cursor: pointer;
 }
 
 .action-icons i {
   color: #333;
   padding: 2px;
 }
-
 .action-icons i:hover {
   color: red;
 }

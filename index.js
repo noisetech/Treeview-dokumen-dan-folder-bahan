@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const treeContainer = document.getElementById("tree-container");
 
   // ===============================
-  // Contoh JSON untuk tree
+  // DATA TREE
   // ===============================
   const treeData = {
     name: "Root Folder",
@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         name: "Level 5 Folder",
                         children: [
                           { name: "file-dd-1.pdf" },
-                          { name: "file-aa-2.docx" },
+                          { name: "file-aa-2.zip" },
                         ],
                       },
                     ],
@@ -41,11 +41,33 @@ document.addEventListener("DOMContentLoaded", function () {
     ],
   };
 
-  console.log(treeData);
+  // ===============================
+  // BUILD TREE
+  // ===============================
+  // function buildTree(node) {
+  //   const li = document.createElement("li");
+  //   li.setAttribute("role", "treeitem");
+  //   li.setAttribute("tabindex", "0");
+  //   li.setAttribute("aria-selected", "false");
 
-  // ===============================
-  // FUNCTION: BUILD TREE RECURSIVE
-  // ===============================
+  //   if (node.children) {
+  //     li.setAttribute("aria-expanded", "false");
+  //     const span = document.createElement("span");
+  //     span.textContent = node.name;
+  //     li.appendChild(span);
+
+  //     const ul = document.createElement("ul");
+  //     ul.setAttribute("role", "group");
+  //     node.children.forEach((child) => ul.appendChild(buildTree(child)));
+  //     li.appendChild(ul);
+  //   } else {
+  //     li.classList.add("file");
+  //     li.textContent = node.name;
+  //   }
+
+  //   return li;
+  // }
+
   function buildTree(node) {
     const li = document.createElement("li");
     li.setAttribute("role", "treeitem");
@@ -85,45 +107,87 @@ document.addEventListener("DOMContentLoaded", function () {
     return li;
   }
 
-  // build root tree
   treeContainer.appendChild(buildTree(treeData));
-
-  // ===============================
-  // TREE INTERACTION (sesuai js lama)
-  // ===============================
   const tree = treeContainer;
 
+  let lastSelected = null;
+
+  // ===============================
+  // HELPER
+  // ===============================
+  function getVisibleItems() {
+    return [...tree.querySelectorAll('[role="treeitem"]')].filter(
+      (el) => el.offsetParent !== null,
+    );
+  }
+
+  function clearSelection(scope = tree) {
+    scope
+      .querySelectorAll('[aria-selected="true"]')
+      .forEach((el) => el.setAttribute("aria-selected", "false"));
+  }
+
+  function selectItem(item) {
+    item.setAttribute("aria-selected", "true");
+  }
+
+  function toggleItem(item) {
+    const isSelected = item.getAttribute("aria-selected") === "true";
+    item.setAttribute("aria-selected", (!isSelected).toString());
+  }
+
+  // ===============================
+  // CLICK (MULTI SELECT + FOLDER TOGGLE)
+  // ===============================
   tree.addEventListener("click", function (e) {
     const item = e.target.closest('[role="treeitem"]');
     if (!item) return;
 
     const isFolder = item.querySelector(":scope > ul");
 
-    // REMOVE OLD SELECTION
-    document
-      .querySelectorAll('[aria-selected="true"]')
-      .forEach((el) => el.setAttribute("aria-selected", "false"));
+    // CMD / CTRL select
+    if (e.metaKey || e.ctrlKey) {
+      toggleItem(item);
+      lastSelected = item;
+    }
+    // SHIFT range
+    else if (e.shiftKey && lastSelected) {
+      const items = getVisibleItems();
+      const start = items.indexOf(lastSelected);
+      const end = items.indexOf(item);
+      const [min, max] = start < end ? [start, end] : [end, start];
 
-    // SET NEW SELECTION
-    item.setAttribute("aria-selected", "true");
+      clearSelection();
+      for (let i = min; i <= max; i++) {
+        selectItem(items[i]);
+      }
+    }
+    // Single select
+    else {
+      clearSelection();
+      selectItem(item);
+      lastSelected = item;
+    }
 
-    // TOGGLE FOLDER
+    // console.log(lastSelected);
+
+    // Toggle folder
     if (isFolder) {
       const expanded = item.getAttribute("aria-expanded") === "true";
-      item.setAttribute("aria-expanded", !expanded);
+      item.setAttribute("aria-expanded", (!expanded).toString());
     }
 
     e.stopPropagation();
   });
 
+  // ===============================
+  // KEYBOARD NAVIGATION (TETAP ADA)
+  // ===============================
   tree.addEventListener("keydown", function (e) {
     const current = document.activeElement.closest('[role="treeitem"]');
     if (!current) return;
 
-    const visibleItems = [...tree.querySelectorAll('[role="treeitem"]')].filter(
-      (el) => el.offsetParent !== null,
-    );
-
+    const visibleItems = getVisibleItems();
     let index = visibleItems.indexOf(current);
 
     switch (e.key) {
@@ -153,10 +217,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // ===============================
-  // HAPUS FILE/FOLDER SESUAI ITEM TERPILIH
-  // ===============================
-  // ===============================
-  // FUNCTION: GET CURRENT PATH
+  // GET CURRENT PATH
   // ===============================
   function getCurrentPath(item) {
     const parentFolder = item.parentElement.closest('[role="treeitem"]');
@@ -172,46 +233,88 @@ document.addEventListener("DOMContentLoaded", function () {
       ? itemLabelEl.innerText.trim()
       : item.childNodes[0].textContent.trim();
 
-    // jika ada parent, gabungkan parent + item, jika tidak hanya item
-    return parentLabel ? `${parentLabel} / ${itemLabel}` : itemLabel;
+    return parentLabel ? `${parentLabel}/${itemLabel}` : itemLabel;
   }
 
-  // ===============================
-  // HAPUS FILE / FOLDER SESUAI ITEM TERPILIH
-  // ===============================
-  const deleteButtons = document.querySelectorAll(".hapus");
+  // function getCurrentPath(item) {
+  //   const parts = [];
+  //   let current = item;
 
-  deleteButtons.forEach((btn) => {
+  //   while (current && current.getAttribute("role") === "treeitem") {
+  //     const labelEl = current.querySelector(":scope > span");
+  //     const label = labelEl
+  //       ? labelEl.innerText.trim()
+  //       : current.childNodes[0].textContent.trim();
+
+  //     parts.unshift(label);
+  //     current = current.parentElement.closest('[role="treeitem"]');
+  //   }
+
+  //   return parts.join("/");
+  // }
+
+  // ===============================
+  // DELETE MULTI
+  // ===============================
+  // document.querySelectorAll(".hapus").forEach((btn) => {
+  //   btn.addEventListener("click", function (e) {
+  //     e.preventDefault();
+  //     e.stopPropagation();
+
+  //     const card = btn.closest(".card");
+  //     const selectedItems = card.querySelectorAll(
+  //       '[role="treeitem"][aria-selected="true"]',
+  //     );
+
+  //     if (!selectedItems.length) {
+  //       alert("Pilih file atau folder dulu!");
+  //       return;
+  //     }
+
+  //     selectedItems.forEach((item) => {
+  //       const path = getCurrentPath(item);
+  //       console.log("Hapus:", path);
+  //       item.remove();
+
+  //       // kirim ke backend contoh
+  //       // fetch('/hapus-file', {
+  //       //   method: 'POST',
+  //       //   headers: { 'Content-Type': 'application/json' },
+  //       //   body: JSON.stringify({ path })
+  //       // });
+  //     });
+  //   });
+  // });
+
+  document.querySelectorAll(".hapus").forEach((btn) => {
     btn.addEventListener("click", function (e) {
       e.preventDefault();
       e.stopPropagation();
 
-      // cari card tempat tombol ini berada
       const card = btn.closest(".card");
-      if (!card) return;
-
-      // cari item yang dipilih di card
-      const selectedItem = card.querySelector(
+      const selectedItems = card.querySelectorAll(
         '[role="treeitem"][aria-selected="true"]',
       );
-      if (!selectedItem) {
-        alert("Pilih file atau folder yang ingin dihapus!");
+
+      if (!selectedItems.length) {
+        alert("Pilih file atau folder dulu!");
         return;
       }
 
-      // ambil current path (folder saat ini)
-      const currentPath = getCurrentPath(selectedItem);
+      const paths = [];
 
-      // hapus item dari DOM
-      selectedItem.remove();
+      selectedItems.forEach((item) => {
+        paths.push(getCurrentPath(item));
+        item.remove();
+      });
 
-      console.log("Item terpilih dihapus (current path):", currentPath);
+      console.log("Dihapus banyak:", paths);
 
-      // contoh kirim ke backend
+      // contoh kirim array ke backend
       // fetch('/hapus-file', {
       //   method: 'POST',
       //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ path: currentPath })
+      //   body: JSON.stringify({ paths })
       // });
     });
   });
