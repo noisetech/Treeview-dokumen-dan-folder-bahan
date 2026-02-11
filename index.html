@@ -19,7 +19,7 @@
   <body>
     <h3 id="tree_label"></h3>
 
-    <div class="row">
+    <div class="row px-4">
       <div class="col-md-4">
         <div class="card shadow">
           <div class="card-body">
@@ -44,7 +44,7 @@
             <a class="badge bg-danger hapus mb-4" href="#"
               ><span>Hapus</span></a
             >
-<!-- 
+            <!-- 
             <small class="text-muted d-block mb-2">
               Gunakan ⌘ / Ctrl untuk pilih banyak
             </small> -->
@@ -55,6 +55,13 @@
               role="tree"
               aria-labelledby="tree_label"
             ></ul>
+
+            <input
+              type="text"
+              id="searchFile"
+              class="form-control my-3"
+              placeholder="Cari file atau folder..."
+            />
           </div>
         </div>
       </div>

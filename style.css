@@ -1,6 +1,8 @@
 /* =========================
    RESET
 ========================= */
+
+
 ul[role="tree"],
 ul[role="group"] {
   margin: 0;
@@ -41,13 +43,34 @@ small.text-muted {
 }
 
 /* FILE TYPES */
-.file.pdf::before { content: "\f1c1"; color: #e53935; }
-.file.word::before { content: "\f1c2"; color: #1976d2; }
-.file.excel::before { content: "\f1c3"; color: #2e7d32; }
-.file.image::before { content: "\f1c5"; color: #8e24aa; }
-.file.video::before { content: "\f1c8"; color: #ef6c00; }
-.file.zip::before { content: "\f1c6"; color: #6d4c41; }
-.file-default::before { content: "\f15b"; color: #607d8b; }
+.file.pdf::before {
+  content: "\f1c1";
+  color: #e53935;
+}
+.file.word::before {
+  content: "\f1c2";
+  color: #1976d2;
+}
+.file.excel::before {
+  content: "\f1c3";
+  color: #2e7d32;
+}
+.file.image::before {
+  content: "\f1c5";
+  color: #8e24aa;
+}
+.file.video::before {
+  content: "\f1c8";
+  color: #ef6c00;
+}
+.file.zip::before {
+  content: "\f1c6";
+  color: #6d4c41;
+}
+.file-default::before {
+  content: "\f15b";
+  color: #607d8b;
+}
 
 /* FOLDER */
 [role="treeitem"][aria-expanded="false"]::before {
@@ -77,7 +100,7 @@ small.text-muted {
 /* SELECTED (single & multi sama) */
 [role="treeitem"][aria-selected="true"] {
   background: #cce5ff;
-  border-left: 4px solid #0d6efd;
+  /* border-left: 4px solid #0d6efd; */
 }
 
 /* HOVER (yang belum dipilih) */
@@ -123,4 +146,8 @@ ul[role="group"] {
 }
 .action-icons i:hover {
   color: red;
+}
+.tree-match {
+  /* outline: 2px solid #1976d2; */
+  background: #e3f2fd !important;
 }

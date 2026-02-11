@@ -1,9 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
   const treeContainer = document.getElementById("tree-container");
 
-  // ===============================
-  // DATA TREE
-  // ===============================
   const treeData = {
     name: "Root Folder",
     children: [
@@ -25,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
                       {
                         name: "Level 5 Folder",
                         children: [
-                          { name: "file-dd-1.pdf" },
+                          { name: "pengesahan-laboratium-2024-1.pdf" },
                           { name: "file-aa-2.zip" },
                         ],
                       },
@@ -41,33 +38,6 @@ document.addEventListener("DOMContentLoaded", function () {
     ],
   };
 
-  // ===============================
-  // BUILD TREE
-  // ===============================
-  // function buildTree(node) {
-  //   const li = document.createElement("li");
-  //   li.setAttribute("role", "treeitem");
-  //   li.setAttribute("tabindex", "0");
-  //   li.setAttribute("aria-selected", "false");
-
-  //   if (node.children) {
-  //     li.setAttribute("aria-expanded", "false");
-  //     const span = document.createElement("span");
-  //     span.textContent = node.name;
-  //     li.appendChild(span);
-
-  //     const ul = document.createElement("ul");
-  //     ul.setAttribute("role", "group");
-  //     node.children.forEach((child) => ul.appendChild(buildTree(child)));
-  //     li.appendChild(ul);
-  //   } else {
-  //     li.classList.add("file");
-  //     li.textContent = node.name;
-  //   }
-
-  //   return li;
-  // }
-
   function buildTree(node) {
     const li = document.createElement("li");
     li.setAttribute("role", "treeitem");
@@ -75,7 +45,6 @@ document.addEventListener("DOMContentLoaded", function () {
     li.setAttribute("aria-selected", "false");
 
     if (node.children) {
-      // folder
       li.setAttribute("aria-expanded", "false");
       const span = document.createElement("span");
       span.textContent = node.name;
@@ -89,7 +58,6 @@ document.addEventListener("DOMContentLoaded", function () {
       li.appendChild(ul);
     } else {
       li.classList.add("file");
-
       const ext = node.name.split(".").pop().toLowerCase();
 
       if (ext === "pdf") li.classList.add("pdf");
@@ -109,15 +77,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
   treeContainer.appendChild(buildTree(treeData));
   const tree = treeContainer;
-
   let lastSelected = null;
 
-  // ===============================
-  // HELPER
-  // ===============================
   function getVisibleItems() {
     return [...tree.querySelectorAll('[role="treeitem"]')].filter(
-      (el) => el.offsetParent !== null,
+      (el) => el.offsetParent !== null
     );
   }
 
@@ -136,22 +100,34 @@ document.addEventListener("DOMContentLoaded", function () {
     item.setAttribute("aria-selected", (!isSelected).toString());
   }
 
-  // ===============================
-  // CLICK (MULTI SELECT + FOLDER TOGGLE)
-  // ===============================
+  function expandParents(item) {
+    let parent = item.parentElement.closest('[role="treeitem"]');
+    while (parent) {
+      parent.setAttribute("aria-expanded", "true");
+      parent = parent.parentElement.closest('[role="treeitem"]');
+    }
+  }
+
+  function scrollToItem(item) {
+    item.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+
+  function clearSearchHighlight() {
+    tree.querySelectorAll(".tree-match").forEach((el) => {
+      el.classList.remove("tree-match");
+    });
+  }
+
   tree.addEventListener("click", function (e) {
     const item = e.target.closest('[role="treeitem"]');
     if (!item) return;
 
     const isFolder = item.querySelector(":scope > ul");
 
-    // CMD / CTRL select
     if (e.metaKey || e.ctrlKey) {
       toggleItem(item);
       lastSelected = item;
-    }
-    // SHIFT range
-    else if (e.shiftKey && lastSelected) {
+    } else if (e.shiftKey && lastSelected) {
       const items = getVisibleItems();
       const start = items.indexOf(lastSelected);
       const end = items.indexOf(item);
@@ -161,17 +137,12 @@ document.addEventListener("DOMContentLoaded", function () {
       for (let i = min; i <= max; i++) {
         selectItem(items[i]);
       }
-    }
-    // Single select
-    else {
+    } else {
       clearSelection();
       selectItem(item);
       lastSelected = item;
     }
 
-    // console.log(lastSelected);
-
-    // Toggle folder
     if (isFolder) {
       const expanded = item.getAttribute("aria-expanded") === "true";
       item.setAttribute("aria-expanded", (!expanded).toString());
@@ -180,9 +151,6 @@ document.addEventListener("DOMContentLoaded", function () {
     e.stopPropagation();
   });
 
-  // ===============================
-  // KEYBOARD NAVIGATION (TETAP ADA)
-  // ===============================
   tree.addEventListener("keydown", function (e) {
     const current = document.activeElement.closest('[role="treeitem"]');
     if (!current) return;
@@ -216,17 +184,14 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // ===============================
-  // GET CURRENT PATH
-  // ===============================
   function getCurrentPath(item) {
     const parentFolder = item.parentElement.closest('[role="treeitem"]');
     const parentLabelEl = parentFolder?.querySelector(":scope > span");
     const parentLabel = parentLabelEl
       ? parentLabelEl.innerText.trim()
       : parentFolder
-        ? parentFolder.childNodes[0].textContent.trim()
-        : "";
+      ? parentFolder.childNodes[0].textContent.trim()
+      : "";
 
     const itemLabelEl = item.querySelector(":scope > span");
     const itemLabel = itemLabelEl
@@ -236,56 +201,6 @@ document.addEventListener("DOMContentLoaded", function () {
     return parentLabel ? `${parentLabel}/${itemLabel}` : itemLabel;
   }
 
-  // function getCurrentPath(item) {
-  //   const parts = [];
-  //   let current = item;
-
-  //   while (current && current.getAttribute("role") === "treeitem") {
-  //     const labelEl = current.querySelector(":scope > span");
-  //     const label = labelEl
-  //       ? labelEl.innerText.trim()
-  //       : current.childNodes[0].textContent.trim();
-
-  //     parts.unshift(label);
-  //     current = current.parentElement.closest('[role="treeitem"]');
-  //   }
-
-  //   return parts.join("/");
-  // }
-
-  // ===============================
-  // DELETE MULTI
-  // ===============================
-  // document.querySelectorAll(".hapus").forEach((btn) => {
-  //   btn.addEventListener("click", function (e) {
-  //     e.preventDefault();
-  //     e.stopPropagation();
-
-  //     const card = btn.closest(".card");
-  //     const selectedItems = card.querySelectorAll(
-  //       '[role="treeitem"][aria-selected="true"]',
-  //     );
-
-  //     if (!selectedItems.length) {
-  //       alert("Pilih file atau folder dulu!");
-  //       return;
-  //     }
-
-  //     selectedItems.forEach((item) => {
-  //       const path = getCurrentPath(item);
-  //       console.log("Hapus:", path);
-  //       item.remove();
-
-  //       // kirim ke backend contoh
-  //       // fetch('/hapus-file', {
-  //       //   method: 'POST',
-  //       //   headers: { 'Content-Type': 'application/json' },
-  //       //   body: JSON.stringify({ path })
-  //       // });
-  //     });
-  //   });
-  // });
-
   document.querySelectorAll(".hapus").forEach((btn) => {
     btn.addEventListener("click", function (e) {
       e.preventDefault();
@@ -293,7 +208,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       const card = btn.closest(".card");
       const selectedItems = card.querySelectorAll(
-        '[role="treeitem"][aria-selected="true"]',
+        '[role="treeitem"][aria-selected="true"]'
       );
 
       if (!selectedItems.length) {
@@ -309,13 +224,35 @@ document.addEventListener("DOMContentLoaded", function () {
       });
 
       console.log("Dihapus banyak:", paths);
+    });
+  });
 
-      // contoh kirim array ke backend
-      // fetch('/hapus-file', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ paths })
-      // });
+  document.getElementById("searchFile")?.addEventListener("input", function () {
+    const keyword = this.value.toLowerCase().trim();
+
+    clearSearchHighlight();
+    clearSelection();
+
+    tree.querySelectorAll('[aria-expanded="true"]').forEach((el) => {
+      el.setAttribute("aria-expanded", "false");
+    });
+
+    if (!keyword) return;
+
+    const items = tree.querySelectorAll('[role="treeitem"]');
+
+    items.forEach((item) => {
+      const labelEl = item.querySelector(":scope > span");
+      const label = labelEl
+        ? labelEl.innerText.toLowerCase()
+        : item.childNodes[0].textContent.toLowerCase();
+
+      if (label.includes(keyword)) {
+        expandParents(item);
+        item.classList.add("tree-match");
+        item.setAttribute("aria-selected", "true");
+        scrollToItem(item);
+      }
     });
   });
 });
