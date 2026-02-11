@@ -102,27 +102,27 @@ document.addEventListener("DOMContentLoaded", function () {
   console.log(treeData);
 
   /* ===============================
-     BUILD TREE
+     BUILD TREE (OPTIMIZED)
   =============================== */
   function buildTree(node) {
     const li = document.createElement("li");
     li.setAttribute("role", "treeitem");
-    li.setAttribute("tabindex", "0");
+    li.tabIndex = 0;
     li.setAttribute("aria-selected", "false");
 
     if (node.children) {
       li.setAttribute("aria-expanded", "false");
+
       const span = document.createElement("span");
       span.textContent = node.name;
+      span.className = "folder-label";
       li.appendChild(span);
 
       const ul = document.createElement("ul");
       ul.setAttribute("role", "group");
+      ul.hidden = true;
 
-      node.children.forEach((child) => {
-        ul.appendChild(buildTree(child));
-      });
-
+      node.children.forEach((child) => ul.appendChild(buildTree(child)));
       li.appendChild(ul);
     } else {
       li.classList.add("file");
@@ -143,22 +143,22 @@ document.addEventListener("DOMContentLoaded", function () {
     return li;
   }
 
-  /* ===============================
-     RENDER ALL ROOT
-  =============================== */
   treeData.forEach((root) => treeContainer.appendChild(buildTree(root)));
 
   const tree = treeContainer;
   let lastSelected = null;
 
+  /* ===============================
+     UTIL
+  =============================== */
   function getVisibleItems() {
     return [...tree.querySelectorAll('[role="treeitem"]')].filter(
       (el) => el.offsetParent !== null,
     );
   }
 
-  function clearSelection(scope = tree) {
-    scope
+  function clearSelection() {
+    tree
       .querySelectorAll('[aria-selected="true"]')
       .forEach((el) => el.setAttribute("aria-selected", "false"));
   }
@@ -167,31 +167,23 @@ document.addEventListener("DOMContentLoaded", function () {
     item.setAttribute("aria-selected", "true");
   }
 
-  function toggleItem(item) {
-    const isSelected = item.getAttribute("aria-selected") === "true";
-    item.setAttribute("aria-selected", (!isSelected).toString());
+  function expandItem(item, state) {
+    const group = item.querySelector(":scope > ul");
+    if (!group) return;
+    item.setAttribute("aria-expanded", state);
+    group.hidden = !state;
   }
 
   function expandParents(item) {
     let parent = item.parentElement.closest('[role="treeitem"]');
     while (parent) {
-      parent.setAttribute("aria-expanded", "true");
+      expandItem(parent, true);
       parent = parent.parentElement.closest('[role="treeitem"]');
     }
   }
 
-  function scrollToItem(item) {
-    item.scrollIntoView({ behavior: "smooth", block: "center" });
-  }
-
-  function clearSearchHighlight() {
-    tree
-      .querySelectorAll(".tree-match")
-      .forEach((el) => el.classList.remove("tree-match"));
-  }
-
   /* ===============================
-     CLICK SELECT
+     CLICK (EVENT DELEGATION)
   =============================== */
   tree.addEventListener("click", function (e) {
     const item = e.target.closest('[role="treeitem"]');
@@ -199,15 +191,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const isFolder = item.querySelector(":scope > ul");
 
-    if (e.metaKey || e.ctrlKey) {
-      toggleItem(item);
+    if (e.ctrlKey || e.metaKey) {
+      item.setAttribute(
+        "aria-selected",
+        item.getAttribute("aria-selected") !== "true",
+      );
       lastSelected = item;
     } else if (e.shiftKey && lastSelected) {
       const items = getVisibleItems();
       const start = items.indexOf(lastSelected);
       const end = items.indexOf(item);
       const [min, max] = start < end ? [start, end] : [end, start];
-
       clearSelection();
       for (let i = min; i <= max; i++) selectItem(items[i]);
     } else {
@@ -218,14 +212,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (isFolder) {
       const expanded = item.getAttribute("aria-expanded") === "true";
-      item.setAttribute("aria-expanded", (!expanded).toString());
+      expandItem(item, !expanded);
     }
 
     e.stopPropagation();
   });
 
   /* ===============================
-     KEYBOARD NAV
+     KEYBOARD
   =============================== */
   tree.addEventListener("keydown", function (e) {
     const current = document.activeElement.closest('[role="treeitem"]');
@@ -236,24 +230,27 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (e.key === "ArrowDown" && visibleItems[index + 1])
       visibleItems[index + 1].focus();
+
     if (e.key === "ArrowUp" && visibleItems[index - 1])
       visibleItems[index - 1].focus();
-    if (e.key === "ArrowRight") current.setAttribute("aria-expanded", "true");
-    if (e.key === "ArrowLeft") current.setAttribute("aria-expanded", "false");
+
+    if (e.key === "ArrowRight") expandItem(current, true);
+    if (e.key === "ArrowLeft") expandItem(current, false);
+
     if (e.key === "Enter" || e.key === " ") current.click();
   });
 
   /* ===============================
-     FULL PATH FIX
+     PATH
   =============================== */
   function getCurrentPath(item) {
     let parts = [];
     let current = item;
 
     while (current && current.matches('[role="treeitem"]')) {
-      const labelEl = current.querySelector(":scope > span");
+      const labelEl = current.querySelector(":scope > .folder-label");
       const label = labelEl
-        ? labelEl.innerText.trim()
+        ? labelEl.textContent.trim()
         : current.childNodes[0].textContent.trim();
 
       parts.unshift(label);
@@ -264,59 +261,27 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   /* ===============================
-     DELETE
+     DELETE (NO DUPLICATE LISTENER)
   =============================== */
-  document.querySelectorAll(".hapus").forEach((btn) => {
-    btn.addEventListener("click", function (e) {
-      e.preventDefault();
-      e.stopPropagation();
+  document.addEventListener("click", function (e) {
+    if (!e.target.matches(".hapus")) return;
 
-      const card = btn.closest(".card");
-      const selectedItems = card.querySelectorAll(
-        '[role="treeitem"][aria-selected="true"]',
-      );
+    e.preventDefault();
+    const selectedItems = tree.querySelectorAll(
+      '[role="treeitem"][aria-selected="true"]',
+    );
 
-      if (!selectedItems.length) {
-        alert("Pilih file atau folder dulu!");
-        return;
-      }
+    if (!selectedItems.length) {
+      alert("Pilih file atau folder dulu!");
+      return;
+    }
 
-      const paths = [];
-      selectedItems.forEach((item) => {
-        paths.push(getCurrentPath(item));
-        item.remove();
-      });
-
-      console.log("Dihapus:", paths);
+    const paths = [];
+    selectedItems.forEach((item) => {
+      paths.push(getCurrentPath(item));
+      item.remove();
     });
-  });
 
-  /* ===============================
-     SEARCH
-  =============================== */
-  document.getElementById("searchFile")?.addEventListener("input", function () {
-    const keyword = this.value.toLowerCase().trim();
-
-    clearSearchHighlight();
-    clearSelection();
-    tree
-      .querySelectorAll('[aria-expanded="true"]')
-      .forEach((el) => el.setAttribute("aria-expanded", "false"));
-
-    if (!keyword) return;
-
-    tree.querySelectorAll('[role="treeitem"]').forEach((item) => {
-      const labelEl = item.querySelector(":scope > span");
-      const label = labelEl
-        ? labelEl.innerText.toLowerCase()
-        : item.childNodes[0].textContent.toLowerCase();
-
-      if (label.includes(keyword)) {
-        expandParents(item);
-        item.classList.add("tree-match");
-        item.setAttribute("aria-selected", "true");
-        scrollToItem(item);
-      }
-    });
+    console.log("Dihapus:", paths);
   });
 });
